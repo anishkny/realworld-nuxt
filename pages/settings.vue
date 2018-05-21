@@ -12,8 +12,23 @@
             <fieldset class="form-group"><input type="email" class="form-control form-control-lg" placeholder="Email"></fieldset>
             <fieldset class="form-group"><input type="password" class="form-control form-control-lg" placeholder="New Password"></fieldset><button class="btn btn-lg btn-primary pull-xs-right" type="submit">Update Settings</button></fieldset>
         </form>
-        <hr><button class="btn btn-outline-danger">Or click here to logout.</button></div>
+        <hr><button @click.stop.prevent="handleLogout" class="btn btn-outline-danger">Or click here to logout.</button></div>
     </div>
   </div>
 </div>
 </template>
+
+<script>
+export default {
+
+  methods: {
+
+    handleLogout() {
+      this.$store.commit('setUser', null);
+      this.$router.push('/');
+    },
+
+  },
+
+}
+</script>
