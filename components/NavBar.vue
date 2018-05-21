@@ -5,7 +5,7 @@
 
     <ul class="nav navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" style="color: red;">Work in progress!</a>
+        <a href="https://github.com/anishkny/realworld-nuxt" class="nav-link" style="color: red;">Work in progress!</a>
       </li>
     </ul>
 
