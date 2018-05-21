@@ -5,11 +5,11 @@
       <div class="feed-toggle">
         <ul class="nav nav-pills outline-active">
           <li class="nav-item">
-            <a href="" class="nav-link active">Global Feed</a>
+            <a href="" @click.stop.prevent="currentTag=''; currentPage=1;" :class="{ 'nav-link': true, 'active': !currentTag }">Global Feed</a>
           </li>
-          <!-- <li class="nav-item">
-            <a href="" class="nav-link active"><i class="ion-pound"></i>dragons</a>
-          </li> -->
+          <li v-if="currentTag" class="nav-item active">
+            <a href="" class="nav-link active"><i class="ion-pound"></i>{{currentTag}}</a>
+          </li>
         </ul>
       </div>
       <div>
@@ -34,27 +34,34 @@
             <h1>{{article.title}}</h1>
             <p>{{article.description}}</p>
             <span>Read more...</span>
-            <ul class="tag-list"></ul>
+            <ul class="tag-list">
+              <li v-for="tag in article.tagList" class="tag-default tag-pill tag-outline">
+                {{tag}}
+              </li>
+            </ul>
           </a>
         </div>
 
         <nav>
           <ul class="pagination">
-            <li v-for="pageNumber in articlesCount/10" :class="{'page-item': true, 'active': pageNumber == currentPage}">
-              <a class="page-link" @click.prevent.stop="currentPage = pageNumber" href="">{{pageNumber}}</a>
+            <li v-for="pageNumber in Math.ceil(articlesCount/10)" :class="{'page-item': true, 'active': pageNumber == currentPage}">
+              <a class="page-link" @click.prevent.stop="currentPage=pageNumber;" href="">{{pageNumber}}</a>
             </li>
           </ul>
         </nav>
+
       </div>
     </div>
+
     <div class="col-md-3">
       <div class="sidebar">
         <p>Popular Tags</p>
         <div class="tag-list">
-          <a v-for="tag in tags" href="" class="tag-default tag-pill">{{tag}}</a>
+          <a v-for="tag in tags" @click.stop.prevent="currentTag=tag; currentPage=1;" href="" class="tag-default tag-pill">{{tag}}</a>
         </div>
       </div>
     </div>
+
   </div>
 </div>
 </template>
@@ -71,6 +78,7 @@ export default {
       articles: [],
       articlesCount: 0,
       currentPage: 0,
+      currentTag: '',
     }
   },
 
@@ -81,16 +89,32 @@ export default {
   },
 
   watch: {
-    async currentPage(newPageNumber) {
-      if (newPageNumber <= 0) {
+    currentPage() {
+      this.getArticles();
+    },
+    currentTag() {
+      this.getArticles();
+    },
+  },
+
+  methods: {
+
+    async getArticles() {
+      if (this.currentPage <= 0) {
         return;
       }
       const offset = (this.currentPage - 1) * 10;
-      const res = (await axios.get(`https://conduit.productionready.io/api/articles?limit=10&offset=${offset}`)).data;
+      const url = `https://conduit.productionready.io/api/articles?tag=${this.currentTag}&limit=10&offset=${offset}`;
+      console.log(url);
+      const res = (await axios.get(url)).data;
+      console.log(res);
       res.articles.forEach(a => a.updatedAtDisplay = moment(a.updatedAt).format('ddd MMM D YYYY'));
       this.articles = res.articles;
       this.articlesCount = res.articlesCount;
+      console.log(this.articles);
+      console.log(this.articlesCount);
     },
+
   },
 
 }
