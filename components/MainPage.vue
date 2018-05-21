@@ -37,6 +37,14 @@
             <ul class="tag-list"></ul>
           </a>
         </div>
+
+        <nav>
+          <ul class="pagination">
+            <li v-for="pageNumber in articlesCount/10" :class="{'page-item': true, 'active': pageNumber == currentPage}">
+              <a class="page-link" @click.prevent.stop="currentPage = pageNumber" href="">{{pageNumber}}</a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
     <div class="col-md-3">
@@ -61,15 +69,28 @@ export default {
     return {
       tags: [],
       articles: [],
+      articlesCount: 0,
+      currentPage: 0,
     }
   },
 
-  async created() {
-    const tags = (await axios.get('https://conduit.productionready.io/api/tags')).data.tags;
-    this.tags = tags;
-    const articles = (await axios.get('https://conduit.productionready.io/api/articles?limit=10&offset=0')).data.articles;
-    articles.forEach(a => a.updatedAtDisplay = moment(a.updatedAt).format('ddd MMM D YYYY'));
-    this.articles = articles;
+  mounted() {
+    this.currentPage = 1; // Force currentPage watcher to fire
+    axios.get('https://conduit.productionready.io/api/tags').then(res =>
+      this.tags = res.data.tags);
+  },
+
+  watch: {
+    async currentPage(newPageNumber) {
+      if (newPageNumber <= 0) {
+        return;
+      }
+      const offset = (this.currentPage - 1) * 10;
+      const res = (await axios.get(`https://conduit.productionready.io/api/articles?limit=10&offset=${offset}`)).data;
+      res.articles.forEach(a => a.updatedAtDisplay = moment(a.updatedAt).format('ddd MMM D YYYY'));
+      this.articles = res.articles;
+      this.articlesCount = res.articlesCount;
+    },
   },
 
 }

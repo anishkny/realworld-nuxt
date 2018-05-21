@@ -7,7 +7,6 @@
   </div>
   <a id="forkOnGH" href="https://github.com/anishkny/realworld-nuxt" target="_top" style="">
   <i class="ion-social-github"></i>&nbsp;&nbsp;Fork on GitHub</a>
-
 </div>
 </template>
 
@@ -24,7 +23,6 @@ export default {
   },
 }
 </script>
-
 
 <style scoped>
 #forkOnGH {
