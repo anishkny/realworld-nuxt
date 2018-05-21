@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "axios": "^0.18.0",
+    "moment": "^2.22.1",
     "nuxt": "^1.4.0"
   }
 }
