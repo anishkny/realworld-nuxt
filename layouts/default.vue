@@ -1,24 +1,18 @@
 <template>
 <div>
   <nav-bar></nav-bar>
-  <div class="home-page">
-    <banner></banner>
-    <nuxt/>
-  </div>
+  <nuxt/>
   <a id="forkOnGH" href="https://github.com/anishkny/realworld-nuxt" target="_top" style="">
     <i class="ion-social-github"></i>&nbsp;&nbsp;Fork on GitHub</a>
 </div>
 </template>
 
-
 <script>
-import Banner from '@/components/Banner';
 import NavBar from '@/components/NavBar';
 
 export default {
   components: {
     NavBar,
-    Banner,
   },
 }
 </script>
