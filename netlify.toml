@@ -1,0 +1,6 @@
+[Settings]
+  ID = "realworld-nuxt"
+
+[build]
+  publish = "dist/"
+  command = "npm run build"
