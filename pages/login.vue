@@ -4,7 +4,9 @@
     <div class="row">
       <div class="col-md-6 offset-md-3 col-xs-12">
         <h1 class="text-xs-center">Sign In</h1>
-        <p class="text-xs-center"><a class="" href="#register">Need an account?</a></p>
+        <p class="text-xs-center">
+          <nuxt-link class="" to="/register">Need an account?</nuxt-link>
+        </p>
         <form>
           <fieldset>
             <fieldset class="form-group">
@@ -25,8 +27,6 @@
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   data() {
     return {
@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     handleLogin() {
-      axios.post('https://conduit.productionready.io/api/users/login', {
+      this.$axios.post('https://conduit.productionready.io/api/users/login', {
         user: {
           email: this.email,
           password: this.password,
