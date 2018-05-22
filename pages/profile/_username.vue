@@ -48,7 +48,6 @@
 
 <script>
 import Feed from '@/components/Feed';
-import axios from 'axios';
 
 export default {
   components: {
@@ -75,8 +74,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this.$route.params.username);
-    axios.get(`https://conduit.productionready.io/api/profiles/${this.$route.params.username}`)
+    this.$axios.get(`https://conduit.productionready.io/api/profiles/${this.$route.params.username}`)
       .then(res => {
         this.profile = res.data.profile;
       });

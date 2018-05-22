@@ -44,7 +44,6 @@
 <script>
 import Banner from '@/components/Banner';
 import Feed from '@/components/Feed';
-import axios from 'axios';
 
 export default {
 
@@ -63,7 +62,7 @@ export default {
   },
 
   mounted() {
-    axios.get('https://conduit.productionready.io/api/tags').then(res =>
+    this.$axios.get('https://conduit.productionready.io/api/tags').then(res =>
       this.tags = res.data.tags);
     if (this.$store.getters.user) {
       this.selectedTab = 'YOUR_FEED';

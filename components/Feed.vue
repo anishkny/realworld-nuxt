@@ -41,7 +41,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import moment from 'moment';
 
 export default {
@@ -83,7 +82,7 @@ export default {
       } else {
         url = `https://conduit.productionready.io/api/articles?limit=10&offset=${offset}&${this.filter}`;
       }
-      const res = (await axios.get(url)).data;
+      const res = (await this.$axios.get(url)).data;
       res.articles.forEach(a => a.updatedAtDisplay = moment(a.updatedAt).format('ddd MMM D YYYY'));
       this.articles = res.articles;
       this.articlesCount = res.articlesCount;

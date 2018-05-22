@@ -27,8 +27,6 @@
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   data() {
     return {
@@ -38,7 +36,7 @@ export default {
   },
   methods: {
     handleLogin() {
-      axios.post('https://conduit.productionready.io/api/users/login', {
+      this.$axios.post('https://conduit.productionready.io/api/users/login', {
         user: {
           email: this.email,
           password: this.password,
