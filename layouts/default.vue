@@ -2,7 +2,7 @@
 <div>
   <nav-bar></nav-bar>
   <nuxt/>
-  <a id="forkOnGH" href="https://github.com/anishkny/realworld-nuxt" target="_top" style="">
+  <a href="https://github.com/anishkny/realworld-nuxt" id="forkOnGH">
     <i class="ion-social-github"></i>&nbsp;&nbsp;Fork on GitHub</a>
 </div>
 </template>

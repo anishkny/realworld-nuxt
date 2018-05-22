@@ -4,8 +4,9 @@
     <div class="row">
       <div class="col-md-6 offset-md-3 col-xs-12">
         <h1 class="text-xs-center">Sign Up</h1>
-        <p class="text-xs-center"><a class="" href="#login">Have an account?</a></p>
-        <!-- react-empty: 3995 -->
+        <p class="text-xs-center">
+          <nuxt-link class="" to="/login">Have an account?</nuxt-link>
+        </p>
         <form>
           <fieldset>
             <fieldset class="form-group"><input type="text" class="form-control form-control-lg" placeholder="Username"></fieldset>

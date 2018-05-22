@@ -2,13 +2,13 @@
 <div>
   <div v-for="article in articles" class="article-preview">
     <div class="article-meta">
-      <a class="" :href="'profile/' + article.author.username">
+      <nuxt-link class="" :to="'/profile/' + article.author.username">
         <img :src="article.author.image">
-      </a>
+      </nuxt-link>
       <div class="info">
-        <a class="author" :href="'profile/' + article.author.username">
-            {{article.author.username}}
-          </a>
+        <nuxt-link class="author" :to="'/profile/' + article.author.username">
+          {{article.author.username}}
+        </nuxt-link>
         <span class="date">{{article.updatedAtDisplay}}</span>
       </div>
       <div class="pull-xs-right">
@@ -17,7 +17,7 @@
           </button>
       </div>
     </div>
-    <a class="preview-link" :href="'article/' + article.slug">
+    <nuxt-link class="preview-link" :to="'/article/' + article.slug">
       <h1>{{article.title}}</h1>
       <p>{{article.description}}</p>
       <span>Read more...</span>
@@ -26,13 +26,13 @@
           {{tag}}
         </li>
       </ul>
-    </a>
+    </nuxt-link>
   </div>
 
   <nav>
     <ul class="pagination">
       <li v-for="pageNumber in Math.ceil(articlesCount/10)" :class="{'page-item': true, 'active': pageNumber == currentPage}">
-        <a class="page-link" @click.prevent.stop="currentPage=pageNumber;" href="">{{pageNumber}}</a>
+        <a href="" class="page-link" @click.prevent.stop="currentPage=pageNumber;">{{pageNumber}}</a>
       </li>
     </ul>
   </nav>
@@ -77,7 +77,12 @@ export default {
         return;
       }
       const offset = (this.currentPage - 1) * 10;
-      const url = `https://conduit.productionready.io/api/articles?limit=10&offset=${offset}&${this.filter}`;
+      let url = '';
+      if (this.filter == 'feed') {
+        url = `https://conduit.productionready.io/api/articles/feed?limit=10&offset=${offset}`;
+      } else {
+        url = `https://conduit.productionready.io/api/articles?limit=10&offset=${offset}&${this.filter}`;
+      }
       const res = (await axios.get(url)).data;
       res.articles.forEach(a => a.updatedAtDisplay = moment(a.updatedAt).format('ddd MMM D YYYY'));
       this.articles = res.articles;
