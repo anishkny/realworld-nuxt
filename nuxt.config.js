@@ -17,10 +17,15 @@ module.exports = {
 
   modules: [
     '@nuxtjs/axios',
+    '@nuxtjs/markdownit',
   ],
 
   plugins: [
-    '~/plugins/axios'
+    '~/plugins/axios',
   ],
+
+  markdownit: {
+    injected: true
+  },
 
 }
