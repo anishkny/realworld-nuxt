@@ -62,7 +62,7 @@ export default {
   },
 
   mounted() {
-    this.$axios.get('https://conduit.productionready.io/api/tags').then(res =>
+    this.$axios.get('/tags').then(res =>
       this.tags = res.data.tags);
     if (this.$store.getters.user) {
       this.selectedTab = 'YOUR_FEED';

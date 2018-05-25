@@ -112,14 +112,14 @@ export default {
   methods: {
 
     handlePostComment() {
-      this.$axios.post(`https://conduit.productionready.io/api/articles/${this.$route.params.slug}/comments`, {
+      this.$axios.post(`/articles/${this.$route.params.slug}/comments`, {
         comment: { body: this.newCommentText }
       }).then(this.getComments);
       this.newCommentText = '';
     },
 
     getComments() {
-      this.$axios.get(`https://conduit.productionready.io/api/articles/${this.$route.params.slug}/comments`)
+      this.$axios.get(`/articles/${this.$route.params.slug}/comments`)
         .then(res => {
           this.comments = res.data.comments;
           this.comments.forEach(c => c.updatedAtDisplay = moment(c.updatedAt).format('ddd MMM D YYYY'));
@@ -127,14 +127,14 @@ export default {
     },
 
     handleDeleteComment(commentId) {
-      this.$axios.delete(`https://conduit.productionready.io/api/articles/${this.$route.params.slug}/comments/${commentId}`)
+      this.$axios.delete(`/articles/${this.$route.params.slug}/comments/${commentId}`)
         .then(this.getComments);
     },
 
   },
 
   mounted() {
-    this.$axios.get(`https://conduit.productionready.io/api/articles/${this.$route.params.slug}`)
+    this.$axios.get(`/articles/${this.$route.params.slug}`)
       .then(res => {
         this.article = res.data.article;
         this.article.updatedAtDisplay = moment(this.article.updatedAt).format('ddd MMM D YYYY');

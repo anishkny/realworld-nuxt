@@ -74,7 +74,7 @@ export default {
     },
   },
   mounted() {
-    this.$axios.get(`https://conduit.productionready.io/api/profiles/${this.$route.params.username}`)
+    this.$axios.get(`/profiles/${this.$route.params.username}`)
       .then(res => {
         this.profile = res.data.profile;
       });

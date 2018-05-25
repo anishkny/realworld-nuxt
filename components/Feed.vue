@@ -78,9 +78,9 @@ export default {
       const offset = (this.currentPage - 1) * 10;
       let url = '';
       if (this.filter == 'feed') {
-        url = `https://conduit.productionready.io/api/articles/feed?limit=10&offset=${offset}`;
+        url = `/articles/feed?limit=10&offset=${offset}`;
       } else {
-        url = `https://conduit.productionready.io/api/articles?limit=10&offset=${offset}&${this.filter}`;
+        url = `/articles?limit=10&offset=${offset}&${this.filter}`;
       }
       const res = (await this.$axios.get(url)).data;
       res.articles.forEach(a => a.updatedAtDisplay = moment(a.updatedAt).format('ddd MMM D YYYY'));
