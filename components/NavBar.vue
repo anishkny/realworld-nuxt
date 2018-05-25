@@ -22,7 +22,10 @@
           <nuxt-link to="/settings" class="nav-link"><i class="ion-gear-a"></i>&nbsp;Settings</nuxt-link>
         </li>
         <li class="nav-item">
-          <nuxt-link :to="'/profile/' + $store.getters.user.username" class="nav-link">{{$store.getters.user.username}}</nuxt-link>
+          <nuxt-link :to="'/profile/' + $store.getters.user.username" class="nav-link">
+            <img :src="$store.getters.user.image || 'https://static.productionready.io/images/smiley-cyrus.jpg'" class="user-pic">
+            {{$store.getters.user.username}}
+          </nuxt-link>
         </li>
       </template>
 

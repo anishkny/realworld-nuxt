@@ -3,7 +3,7 @@
   <div v-for="article in articles" class="article-preview">
     <div class="article-meta">
       <nuxt-link class="" :to="'/profile/' + article.author.username">
-        <img :src="article.author.image">
+        <img :src="article.author.image || 'https://static.productionready.io/images/smiley-cyrus.jpg'">
       </nuxt-link>
       <div class="info">
         <nuxt-link class="author" :to="'/profile/' + article.author.username">
