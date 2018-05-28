@@ -1,4 +1,5 @@
 export default function({ $axios, redirect, store }) {
+  $axios.defaults.baseURL = 'https://conduit.productionready.io/api';
 
   $axios.onRequest(config => {
     const user = store.getters.user;

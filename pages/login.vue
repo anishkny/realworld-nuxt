@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     handleLogin() {
-      this.$axios.post('https://conduit.productionready.io/api/users/login', {
+      this.$axios.post('/users/login', {
         user: {
           email: this.email,
           password: this.password,

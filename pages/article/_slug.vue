@@ -5,7 +5,7 @@
       <h1>{{article.title}}</h1>
       <div class="article-meta">
         <nuxt-link :to="'/profile/' + article.author.username">
-          <img :src="article.author.image">
+          <img :src="article.author.image || 'https://static.productionready.io/images/smiley-cyrus.jpg'">
         </nuxt-link>
         <div class="info">
           <nuxt-link :to="'/profile/' + article.author.username" class="author">
@@ -24,40 +24,55 @@
         <div>
           <p v-html="$md.render(article.body)"></p>
         </div>
-        <ul class="tag-list ">
-          <li v-for="tag in article.tagList " class="tag-default tag-pill tag-outline ">{{tag}}</li>
+        <ul class="tag-list">
+          <li v-for="tag in article.tagList " class="tag-default tag-pill tag-outline">{{tag}}</li>
         </ul>
       </div>
     </div>
     <hr>
-    <div class="article-actions "></div>
+    <div class="article-actions"></div>
 
-    <div class="row ">
-      <div class="col-xs-12 col-md-8 offset-md-2 ">
-        <p><a class=" " href="#login ">Sign in</a>
-          <!-- react-text: 394 -->&nbsp;or&nbsp;
-          <!-- /react-text --><a class=" " href="#register ">sign up</a>
-          <!-- react-text: 396 -->&nbsp;to add comments on this article.
-          <!-- /react-text -->
+    <div class="row">
+      <div class="col-xs-12 col-md-8 offset-md-2">
+
+        <form v-if="$store.getters.user" class="card comment-form">
+          <div class="card-block">
+            <textarea v-model="newCommentText" class="form-control" placeholder="Write a comment..." rows="3">
+            </textarea>
+          </div>
+          <div class="card-footer">
+            <img :src="$store.getters.user.image || 'https://static.productionready.io/images/smiley-cyrus.jpg'" class="comment-author-img">
+            <button @click.stop.prevent="handlePostComment" class="btn btn-sm btn-primary" type="submit">
+              Post Comment
+            </button>
+          </div>
+        </form>
+
+        <p v-else>
+          <nuxt-link to="/login">Sign in</nuxt-link> &nbsp;or&nbsp;
+          <nuxt-link to="/register">sign up</nuxt-link> &nbsp;to add comments on this article.
         </p>
+
         <div>
 
-          <div v-for="comment in comments " class="card ">
-            <div class="card-block ">
-              <p class="card-text ">{{comment.body}}</p>
+          <div v-for="comment in comments" class="card">
+            <div class="card-block">
+              <p class="card-text">{{comment.body}}</p>
             </div>
-            <div class="card-footer ">
-              <nuxt-link :to=" '/profile/' + comment.author.username ">
-                <img :src="comment.author.image " class="comment-author-img ">
+            <div class="card-footer">
+              <nuxt-link :to="'/profile/' + comment.author.username">
+                <img :src="comment.author.image || 'https://static.productionready.io/images/smiley-cyrus.jpg'" class="comment-author-img">
               </nuxt-link>
               &nbsp;
-              <nuxt-link :to=" '/profile/' + comment.author.username " class="comment-author ">
+              <nuxt-link :to=" '/profile/' + comment.author.username " class="comment-author">
                 {{comment.author.username}}
               </nuxt-link>
-              <span class="date-posted ">{{comment.updatedAtDisplay}}</span>
+              <span class="date-posted">{{comment.updatedAtDisplay}}</span>
+              <span v-if="comment.author && comment.author.username == $store.getters.user.username" class="mod-options">
+                <i @click="handleDeleteComment(comment.id)" class="ion-trash-a"></i>
+              </span>
             </div>
           </div>
-
 
         </div>
       </div>
@@ -90,20 +105,41 @@ export default {
         favoritesCount: 0,
       },
       comments: [],
+      newCommentText: '',
     }
   },
 
+  methods: {
+
+    handlePostComment() {
+      this.$axios.post(`/articles/${this.$route.params.slug}/comments`, {
+        comment: { body: this.newCommentText }
+      }).then(this.getComments);
+      this.newCommentText = '';
+    },
+
+    getComments() {
+      this.$axios.get(`/articles/${this.$route.params.slug}/comments`)
+        .then(res => {
+          this.comments = res.data.comments;
+          this.comments.forEach(c => c.updatedAtDisplay = moment(c.updatedAt).format('ddd MMM D YYYY'));
+        });
+    },
+
+    handleDeleteComment(commentId) {
+      this.$axios.delete(`/articles/${this.$route.params.slug}/comments/${commentId}`)
+        .then(this.getComments);
+    },
+
+  },
+
   mounted() {
-    this.$axios.get(`https://conduit.productionready.io/api/articles/${this.$route.params.slug}`)
+    this.$axios.get(`/articles/${this.$route.params.slug}`)
       .then(res => {
         this.article = res.data.article;
         this.article.updatedAtDisplay = moment(this.article.updatedAt).format('ddd MMM D YYYY');
       });
-    this.$axios.get(`https://conduit.productionready.io/api/articles/${this.$route.params.slug}/comments`)
-      .then(res => {
-        this.comments = res.data.comments;
-        this.comments.forEach(c => c.updatedAtDisplay = moment(c.updatedAt).format('ddd MMM D YYYY'));
-      });
+    this.getComments();
   },
 
 }

@@ -3,7 +3,7 @@
   <div v-for="article in articles" class="article-preview">
     <div class="article-meta">
       <nuxt-link class="" :to="'/profile/' + article.author.username">
-        <img :src="article.author.image">
+        <img :src="article.author.image || 'https://static.productionready.io/images/smiley-cyrus.jpg'">
       </nuxt-link>
       <div class="info">
         <nuxt-link class="author" :to="'/profile/' + article.author.username">
@@ -78,9 +78,9 @@ export default {
       const offset = (this.currentPage - 1) * 10;
       let url = '';
       if (this.filter == 'feed') {
-        url = `https://conduit.productionready.io/api/articles/feed?limit=10&offset=${offset}`;
+        url = `/articles/feed?limit=10&offset=${offset}`;
       } else {
-        url = `https://conduit.productionready.io/api/articles?limit=10&offset=${offset}&${this.filter}`;
+        url = `/articles?limit=10&offset=${offset}&${this.filter}`;
       }
       const res = (await this.$axios.get(url)).data;
       res.articles.forEach(a => a.updatedAtDisplay = moment(a.updatedAt).format('ddd MMM D YYYY'));
