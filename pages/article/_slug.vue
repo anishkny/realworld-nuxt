@@ -68,7 +68,7 @@
                 {{comment.author.username}}
               </nuxt-link>
               <span class="date-posted">{{comment.updatedAtDisplay}}</span>
-              <span v-if="comment.author && comment.author.username == $store.getters.user.username" class="mod-options">
+              <span v-if="$store.getters.user && comment.author.username == $store.getters.user.username" class="mod-options">
                 <i @click="handleDeleteComment(comment.id)" class="ion-trash-a"></i>
               </span>
             </div>

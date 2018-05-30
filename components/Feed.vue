@@ -12,9 +12,9 @@
         <span class="date">{{article.updatedAtDisplay}}</span>
       </div>
       <div class="pull-xs-right">
-        <button class="btn btn-sm btn-outline-primary">
-            <i class="ion-heart"></i>&nbsp;{{article.favoritesCount}}
-          </button>
+        <button @click.stop.prevent="handleFavoriteClick(article, $event)" class="btn btn-sm" :class="{ 'btn-outline-primary': !article.favorited, 'btn-primary': article.favorited }">
+          <i class="ion-heart"></i>&nbsp;{{article.favoritesCount}}
+        </button>
       </div>
     </div>
     <nuxt-link class="preview-link" :to="'/article/' + article.slug">
@@ -86,6 +86,21 @@ export default {
       res.articles.forEach(a => a.updatedAtDisplay = moment(a.updatedAt).format('ddd MMM D YYYY'));
       this.articles = res.articles;
       this.articlesCount = res.articlesCount;
+    },
+
+    handleFavoriteClick(article, event) {
+      if (!this.$store.getters.user) {
+        this.$router.push('/login');
+      } else {
+        event.target.blur();
+        if (!article.favorited) {
+          this.$axios.post(`/articles/${article.slug}/favorite`, {}).then(this.getArticles);
+          article.favorited = true;
+        } else {
+          this.$axios.delete(`/articles/${article.slug}/favorite`).then(this.getArticles);
+          article.favorited = false;
+        }
+      }
     },
 
   },
