@@ -9,12 +9,46 @@
         </p>
         <form>
           <fieldset>
-            <fieldset class="form-group"><input type="text" class="form-control form-control-lg" placeholder="Username"></fieldset>
-            <fieldset class="form-group"><input type="email" class="form-control form-control-lg" placeholder="Email"></fieldset>
-            <fieldset class="form-group"><input type="password" class="form-control form-control-lg" placeholder="Password"></fieldset><button class="btn btn-lg btn-primary pull-xs-right" type="submit">Sign in</button></fieldset>
+            <fieldset class="form-group">
+              <input v-model="username" type="text" class="form-control form-control-lg" placeholder="Username">
+            </fieldset>
+            <fieldset class="form-group">
+              <input v-model="email" type="email" class="form-control form-control-lg" placeholder="Email">
+            </fieldset>
+            <fieldset class="form-group">
+              <input v-model="password" type="password" class="form-control form-control-lg" placeholder="Password">
+            </fieldset>
+            <button @click.stop.prevent="handleSignup" class="btn btn-lg btn-primary pull-xs-right" type="submit">Sign up</button>
+          </fieldset>
         </form>
       </div>
     </div>
   </div>
 </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      username: '',
+      email: '',
+      password: '',
+    };
+  },
+  methods: {
+    handleSignup() {
+      this.$axios.post('/users', {
+        user: {
+          username: this.username,
+          email: this.email,
+          password: this.password,
+        },
+      }).then(res => {
+        this.$store.commit('setUser', res.data.user);
+        this.$router.push('/');
+      });
+    },
+  },
+}
+</script>
